@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1084392307303",
+    "project_id": "ignilab-8df3f",
+    "storage_bucket": "ignilab-8df3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084392307303:android:8d979cd1412380ff1872c2",
+        "android_client_info": {
+          "package_name": "com.example.ignilab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084392307303-o255do1l1job2eng5cki15kqqlsip4er.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJE7hibYpyZcmsN_4EZ2xJfVSbl4DWunE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084392307303-o255do1l1job2eng5cki15kqqlsip4er.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
