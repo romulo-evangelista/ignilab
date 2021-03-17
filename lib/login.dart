@@ -34,7 +34,13 @@ class Login extends StatelessWidget {
               ),
             ],
           ),
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Digite seu email para entrar';
+              }
+              return null;
+            },
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
             decoration: InputDecoration(
@@ -81,7 +87,13 @@ class Login extends StatelessWidget {
               ),
             ],
           ),
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Digite sua senha para entrar';
+              }
+              return null;
+            },
             obscureText: true,
             style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
             decoration: InputDecoration(
@@ -113,15 +125,17 @@ class Login extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginBtn(BuildContext context) {
+  Widget _buildLoginBtn(BuildContext context, GlobalKey<FormState> _formKey) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          context.read<AuthenticationService>().signIn(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim());
+          if (_formKey.currentState.validate()) {
+            context.read<AuthenticationService>().signIn(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim());
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -168,6 +182,8 @@ class Login extends StatelessWidget {
     );
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,26 +213,29 @@ class Login extends StatelessWidget {
               horizontal: 40.0,
               vertical: 120.0,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Entrar",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Entrar",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 30.0),
-                _buildEmailTF(),
-                SizedBox(height: 30.0),
-                _buildPasswordTF(),
-                _buildForgotPasswordTF(),
-                _buildLoginBtn(context),
-                _buildSignUpBtn(),
-              ],
+                  SizedBox(height: 30.0),
+                  _buildEmailTF(),
+                  SizedBox(height: 30.0),
+                  _buildPasswordTF(),
+                  _buildForgotPasswordTF(),
+                  _buildLoginBtn(context, _formKey),
+                  _buildSignUpBtn(),
+                ],
+              ),
             ),
           ),
         ),

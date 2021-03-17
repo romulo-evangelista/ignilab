@@ -30,7 +30,13 @@ Widget _buildTextFieldTF(label, controller) {
             ),
           ],
         ),
-        child: TextField(
+        child: TextFormField(
+          validator: (value) {
+            if (value.isEmpty) {
+              return '$label não pode ser nulo';
+            }
+            return null;
+          },
           style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
           decoration: InputDecoration(
               border: InputBorder.none,
@@ -75,7 +81,13 @@ Widget _buildNumberFieldTF(label, controller) {
             ),
           ],
         ),
-        child: TextField(
+        child: TextFormField(
+          validator: (value) {
+            if (value.isEmpty) {
+              return '$label não pode ser nulo';
+            }
+            return null;
+          },
           keyboardType: TextInputType.number,
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
@@ -104,6 +116,7 @@ Widget _buildAddVaccineBtn(
   TextEditingController modelOrManufacturer,
   TextEditingController batch,
   TextEditingController localOrHealthUnit,
+  GlobalKey<FormState> _formKey,
 ) {
   CollectionReference vaccines =
       FirebaseFirestore.instance.collection('vaccines');
@@ -126,8 +139,10 @@ Widget _buildAddVaccineBtn(
     width: double.infinity,
     child: ElevatedButton(
       onPressed: () {
-        addVaccine();
-        Navigator.pop(context);
+        if (_formKey.currentState.validate()) {
+          addVaccine();
+          Navigator.pop(context);
+        }
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -162,92 +177,98 @@ class FormVaccine extends StatelessWidget {
   final TextEditingController localOrHealthUnitController =
       TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: <Widget>[
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF73AEF5),
-                Color(0xFF61A4F1),
-                Color(0xFF478DE0),
-                Color(0xFF398AE5),
-              ],
-              stops: [0.1, 0.4, 0.7, 0.9],
+      body: Form(
+        key: _formKey,
+        child: Stack(children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF73AEF5),
+                  Color(0xFF61A4F1),
+                  Color(0xFF478DE0),
+                  Color(0xFF398AE5),
+                ],
+                stops: [0.1, 0.4, 0.7, 0.9],
+              ),
             ),
           ),
-        ),
-        Container(
-          height: double.infinity,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 80.0,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.arrow_back_rounded,
-                        color: Colors.white,
+          Container(
+            height: double.infinity,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 80.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Nova Vacina",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        "Nova Vacina",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'OpenSans',
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30.0),
-                _buildTextFieldTF("Nome", nameController),
-                SizedBox(height: 20),
-                _buildNumberFieldTF("Dose", doseController),
-                SizedBox(height: 20),
-                _buildTextFieldTF(
-                    "Data da Aplicação", applicationDateController),
-                SizedBox(height: 20),
-                _buildTextFieldTF(
-                    "Modelo/Fabricante", modelOrManufacturerController),
-                SizedBox(height: 20),
-                _buildTextFieldTF("Lote", batchController),
-                SizedBox(height: 20),
-                _buildTextFieldTF(
-                    "Local/Unidade de Saúde", localOrHealthUnitController),
-                SizedBox(height: 40),
-                _buildAddVaccineBtn(
-                  context,
-                  nameController,
-                  doseController,
-                  applicationDateController,
-                  modelOrManufacturerController,
-                  batchController,
-                  localOrHealthUnitController,
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 30.0),
+                  _buildTextFieldTF("Nome", nameController),
+                  SizedBox(height: 20),
+                  _buildNumberFieldTF("Dose", doseController),
+                  SizedBox(height: 20),
+                  _buildTextFieldTF(
+                      "Data da Aplicação", applicationDateController),
+                  SizedBox(height: 20),
+                  _buildTextFieldTF(
+                      "Modelo/Fabricante", modelOrManufacturerController),
+                  SizedBox(height: 20),
+                  _buildTextFieldTF("Lote", batchController),
+                  SizedBox(height: 20),
+                  _buildTextFieldTF(
+                      "Local/Unidade de Saúde", localOrHealthUnitController),
+                  SizedBox(height: 40),
+                  _buildAddVaccineBtn(
+                    context,
+                    nameController,
+                    doseController,
+                    applicationDateController,
+                    modelOrManufacturerController,
+                    batchController,
+                    localOrHealthUnitController,
+                    _formKey,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }
