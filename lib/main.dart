@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ignilab/controller/invalid_login_controller.dart';
 import 'package:ignilab/services/authentication_service.dart';
 import 'package:ignilab/login.dart';
 import 'package:ignilab/welcome.dart';
@@ -22,11 +23,13 @@ class MyApp extends StatelessWidget {
               create: (_) => AuthenticationService(FirebaseAuth.instance)),
           StreamProvider(
               create: (context) =>
-                  context.read<AuthenticationService>().authStateChanges)
+                  context.read<AuthenticationService>().authStateChanges),
+          ChangeNotifierProvider<InvalidLoginController>.value(
+              value: InvalidLoginController())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Login',
+          title: 'Auth',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,

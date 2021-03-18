@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ignilab/controller/invalid_login_controller.dart';
 import 'package:provider/provider.dart';
 import 'services/authentication_service.dart';
 
@@ -36,9 +37,12 @@ class Login extends StatelessWidget {
           ),
           child: TextFormField(
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Digite seu email para entrar';
-              }
+              if (value.isEmpty) return 'Digite seu email para entrar';
+              Pattern pattern =
+                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+              RegExp regex = new RegExp(pattern);
+              if (!regex.hasMatch(value)) return 'Digite um email válido';
+
               return null;
             },
             keyboardType: TextInputType.emailAddress,
@@ -125,16 +129,22 @@ class Login extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginBtn(BuildContext context, GlobalKey<FormState> _formKey) {
+  Widget _buildLoginBtn(BuildContext context, GlobalKey<FormState> _formKey,
+      InvalidLoginController invalidLoginController) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
-            context.read<AuthenticationService>().signIn(
+            var result = await context.read<AuthenticationService>().signIn(
                 email: emailController.text.trim(),
                 password: passwordController.text.trim());
+
+            if (result ==
+                'There is no user record corresponding to this identifier. The user may have been deleted.') {
+              invalidLoginController.changeInvalid(true);
+            }
           }
         },
         style: ButtonStyle(
@@ -215,27 +225,32 @@ class Login extends StatelessWidget {
             ),
             child: Form(
               key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Entrar",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'OpenSans',
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
+              child: Consumer<InvalidLoginController>(
+                  builder: (context, invalidLoginController, widget) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Entrar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 30.0),
-                  _buildEmailTF(),
-                  SizedBox(height: 30.0),
-                  _buildPasswordTF(),
-                  _buildForgotPasswordTF(),
-                  _buildLoginBtn(context, _formKey),
-                  _buildSignUpBtn(),
-                ],
-              ),
+                    SizedBox(height: 30.0),
+                    _buildEmailTF(),
+                    SizedBox(height: 30.0),
+                    _buildPasswordTF(),
+                    _buildForgotPasswordTF(),
+                    if (invalidLoginController.invalid)
+                      Text('Login inválido, verifique suas credenciais'),
+                    _buildLoginBtn(context, _formKey, invalidLoginController),
+                    _buildSignUpBtn(),
+                  ],
+                );
+              }),
             ),
           ),
         ),
