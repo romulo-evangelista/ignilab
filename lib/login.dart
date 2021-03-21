@@ -245,7 +245,14 @@ class Login extends StatelessWidget {
                     _buildPasswordTF(),
                     _buildForgotPasswordTF(),
                     if (invalidLoginController.invalid)
-                      Text('Login inválido, verifique suas credenciais'),
+                      Text(
+                        'Login inválido! Verifique suas credenciais.',
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     _buildLoginBtn(context, _formKey, invalidLoginController),
                     _buildSignUpBtn(),
                   ],
