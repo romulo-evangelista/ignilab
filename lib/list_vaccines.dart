@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'edit_vaccine.dart';
+
 Future<void> _deleteVaccine(CollectionReference vaccines, String id) {
   return vaccines.doc(id).delete();
 }
@@ -78,11 +80,16 @@ class ListVaccines extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextButton(
-                            child: Icon(Icons.edit, color: Colors.white),
-                            onPressed: () => {}
-                            // MaterialPageRoute(
-                            //     builder: (context) => FormVaccine(document.id)),
+                          child: Icon(Icons.edit, color: Colors.white),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditVaccine(
+                                document: document,
+                              ),
                             ),
+                          ),
+                        ),
                       ),
                       Expanded(
                         child: TextButton(
