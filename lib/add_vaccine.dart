@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -109,15 +110,15 @@ Widget _buildNumberFieldTF(label, controller) {
 }
 
 Widget _buildAddVaccineBtn(
-  BuildContext context,
-  TextEditingController name,
-  TextEditingController dose,
-  TextEditingController applicationDate,
-  TextEditingController modelOrManufacturer,
-  TextEditingController batch,
-  TextEditingController localOrHealthUnit,
-  GlobalKey<FormState> _formKey,
-) {
+    BuildContext context,
+    TextEditingController name,
+    TextEditingController dose,
+    TextEditingController applicationDate,
+    TextEditingController modelOrManufacturer,
+    TextEditingController batch,
+    TextEditingController localOrHealthUnit,
+    GlobalKey<FormState> _formKey,
+    String currentUserEmail) {
   CollectionReference vaccines =
       FirebaseFirestore.instance.collection('vaccines');
 
@@ -130,6 +131,7 @@ Widget _buildAddVaccineBtn(
           'modelOrManufacturer': modelOrManufacturer.text,
           'batch': batch.text,
           'localOrHealthUnit': localOrHealthUnit.text,
+          'belongsTo': currentUserEmail,
         })
         .then((value) => print("Vaccine Added"))
         .catchError((error) => print("Failed to add vaccine: $error"));
@@ -164,8 +166,8 @@ Widget _buildAddVaccineBtn(
   );
 }
 
-class FormVaccine extends StatelessWidget {
-  // FormVaccine(String documentId);
+class AddVaccine extends StatelessWidget {
+  final currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController doseController = TextEditingController();
@@ -262,6 +264,7 @@ class FormVaccine extends StatelessWidget {
                     batchController,
                     localOrHealthUnitController,
                     _formKey,
+                    currentUserEmail,
                   ),
                 ],
               ),

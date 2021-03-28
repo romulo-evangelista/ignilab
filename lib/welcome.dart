@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'form_vaccine.dart';
+import 'add_vaccine.dart';
 import 'list_vaccines.dart';
 import 'services/authentication_service.dart';
 
@@ -85,7 +85,7 @@ class Welcome extends StatelessWidget {
           child: FloatingActionButton(
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FormVaccine()),
+              MaterialPageRoute(builder: (context) => AddVaccine()),
             ),
             child: Icon(
               Icons.add,
