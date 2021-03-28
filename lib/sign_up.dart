@@ -1,10 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ignilab/controller/invalid_login_controller.dart';
-import 'package:ignilab/sign_up.dart';
 import 'package:provider/provider.dart';
-import 'services/authentication_service.dart';
+import 'package:ignilab/services/authentication_service.dart';
 
-class Login extends StatelessWidget {
+class SignUp extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -39,7 +38,7 @@ class Login extends StatelessWidget {
           ),
           child: TextFormField(
             validator: (value) {
-              if (value.isEmpty) return 'Digite seu email para entrar';
+              if (value.isEmpty) return 'Digite um email para cadastrar';
               Pattern pattern =
                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
               RegExp regex = new RegExp(pattern);
@@ -53,7 +52,7 @@ class Login extends StatelessWidget {
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.only(top: 14),
                 prefixIcon: Icon(Icons.email, color: Colors.white),
-                hintText: 'Digite seu Email',
+                hintText: 'Digite seu email',
                 hintStyle: TextStyle(
                   color: Colors.white54,
                   fontFamily: 'OpenSans',
@@ -96,7 +95,7 @@ class Login extends StatelessWidget {
           child: TextFormField(
             validator: (value) {
               if (value.isEmpty) {
-                return 'Digite sua senha para entrar';
+                return 'Digite uma senha para cadastrar';
               }
               return null;
             },
@@ -106,7 +105,7 @@ class Login extends StatelessWidget {
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.only(top: 14),
                 prefixIcon: Icon(Icons.lock, color: Colors.white),
-                hintText: 'Digite seu Senha',
+                hintText: 'Crie uma senha',
                 hintStyle: TextStyle(
                   color: Colors.white54,
                   fontFamily: 'OpenSans',
@@ -118,34 +117,25 @@ class Login extends StatelessWidget {
     );
   }
 
-  Widget _buildForgotPasswordTF() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: TextButton(
-        onPressed: () => print('botão pressionado - esqueci a senha'),
-        child: Text(
-          'Esqueceu sua senha?',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoginBtn(BuildContext context, GlobalKey<FormState> _formKey,
-      InvalidLoginController invalidLoginController) {
+  Widget _buildSignUpBtn(
+    BuildContext context,
+    GlobalKey<FormState> _formKey,
+  ) {
+    print(context);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState.validate()) {
-            var result = await context.read<AuthenticationService>().signIn(
+            var result = await context.read<AuthenticationService>().signUp(
                 email: emailController.text.trim(),
                 password: passwordController.text.trim());
 
-            if (result ==
-                'There is no user record corresponding to this identifier. The user may have been deleted.') {
-              invalidLoginController.changeInvalid(true);
+            if (result == 'Conta criada') {
+              Navigator.pop(context);
+            } else {
+              print(result);
             }
           }
         },
@@ -157,35 +147,7 @@ class Login extends StatelessWidget {
           ),
         ),
         child: Text(
-          'ENTRAR',
-          style: TextStyle(
-              color: Color(0xFF527DAA),
-              letterSpacing: 1.5,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRedirectSignUpPage(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SignUp()),
-        ),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          ),
-        ),
-        child: Text(
-          'CADASTRE-SE',
+          'CADASTRAR',
           style: TextStyle(
               color: Color(0xFF527DAA),
               letterSpacing: 1.5,
@@ -200,71 +162,73 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: <Widget>[
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF73AEF5),
-                Color(0xFF61A4F1),
-                Color(0xFF478DE0),
-                Color(0xFF398AE5),
-              ],
-              stops: [0.1, 0.4, 0.7, 0.9],
+      body: Form(
+        key: _formKey,
+        child: Stack(children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF73AEF5),
+                  Color(0xFF61A4F1),
+                  Color(0xFF478DE0),
+                  Color(0xFF398AE5),
+                ],
+                stops: [0.1, 0.4, 0.7, 0.9],
+              ),
             ),
           ),
-        ),
-        Container(
-          height: double.infinity,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(
-              horizontal: 40.0,
-              vertical: 120.0,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Consumer<InvalidLoginController>(
-                  builder: (context, invalidLoginController, widget) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Entrar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
+          Container(
+            height: double.infinity,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 80.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 30.0),
-                    _buildEmailTF(),
-                    SizedBox(height: 30.0),
-                    _buildPasswordTF(),
-                    _buildForgotPasswordTF(),
-                    if (invalidLoginController.invalid)
                       Text(
-                        'Login inválido! Verifique suas credenciais.',
+                        "Novo Usuário",
                         style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 16,
+                          color: Colors.white,
+                          fontFamily: 'OpenSans',
+                          fontSize: 30.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    _buildLoginBtn(context, _formKey, invalidLoginController),
-                    _buildRedirectSignUpPage(context),
-                  ],
-                );
-              }),
+                    ],
+                  ),
+                  SizedBox(height: 30.0),
+                  _buildEmailTF(),
+                  SizedBox(height: 20),
+                  _buildPasswordTF(),
+                  SizedBox(height: 30.0),
+                  _buildSignUpBtn(context, _formKey),
+                ],
+              ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }
