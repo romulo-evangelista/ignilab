@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:ignilab/controller/invalid_login_controller.dart';
 import 'package:ignilab/services/authentication_service.dart';
 import 'package:ignilab/login.dart';
+import 'package:ignilab/splash.dart';
 import 'package:ignilab/welcome.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: AuthenticationWrapper(),
+          home: SplashScreen(),
         ));
   }
 }
