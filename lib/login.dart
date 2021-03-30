@@ -10,122 +10,57 @@ class Login extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   Widget _buildEmailTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Email',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Color(0xFF6CA8F1),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6.0,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            validator: (value) {
-              if (value.isEmpty) return 'Digite seu email para entrar';
-              Pattern pattern =
-                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-              RegExp regex = new RegExp(pattern);
-              if (!regex.hasMatch(value)) return 'Digite um email válido';
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) return 'Digite seu email para entrar';
+        Pattern pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regex = new RegExp(pattern);
+        if (!regex.hasMatch(value)) return 'Digite um email válido';
 
-              return null;
-            },
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(Icons.email, color: Colors.white),
-                hintText: 'Digite seu Email',
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                  fontFamily: 'OpenSans',
-                )),
-            controller: emailController,
-          ),
-        ),
-      ],
+        return null;
+      },
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      decoration: InputDecoration(
+        labelText: "Email",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(14),
+      ),
+      controller: emailController,
     );
   }
 
   Widget _buildPasswordTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Senha',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Color(0xFF6CA8F1),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6.0,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Digite sua senha para entrar';
-              }
-              return null;
-            },
-            obscureText: true,
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(Icons.lock, color: Colors.white),
-                hintText: 'Digite seu Senha',
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                  fontFamily: 'OpenSans',
-                )),
-            controller: passwordController,
-          ),
-        ),
-      ],
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Digite sua senha para entrar';
+        }
+        return null;
+      },
+      obscureText: true,
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      decoration: InputDecoration(
+        labelText: "Senha",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(14),
+      ),
+      controller: passwordController,
     );
   }
 
   Widget _buildForgotPasswordTF() {
     return Container(
-      alignment: Alignment.centerRight,
       child: TextButton(
         onPressed: () => print('botão pressionado - esqueci a senha'),
         child: Text(
           'Esqueceu sua senha?',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            fontFamily: "FiraSans",
+          ),
         ),
       ),
     );
@@ -134,7 +69,6 @@ class Login extends StatelessWidget {
   Widget _buildLoginBtn(BuildContext context, GlobalKey<FormState> _formKey,
       InvalidLoginController invalidLoginController) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
@@ -150,20 +84,17 @@ class Login extends StatelessWidget {
           }
         },
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
           padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          ),
         ),
         child: Text(
-          'ENTRAR',
+          'LOGIN',
           style: TextStyle(
-              color: Color(0xFF527DAA),
-              letterSpacing: 1.5,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans'),
+            letterSpacing: 1.25,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
         ),
       ),
     );
@@ -171,28 +102,46 @@ class Login extends StatelessWidget {
 
   Widget _buildRedirectSignUpPage(BuildContext context) {
     return Container(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SignUp()),
-        ),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Column(
+        children: [
+          Text(
+            "Ainda não possui cadastro?",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              fontFamily: "FiraSans",
+            ),
           ),
-        ),
-        child: Text(
-          'CADASTRE-SE',
-          style: TextStyle(
-              color: Color(0xFF527DAA),
-              letterSpacing: 1.5,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans'),
-        ),
+          SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignUp()),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                padding:
+                    MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+                side: MaterialStateProperty.all<BorderSide>(
+                  BorderSide(color: Color(0xFF43B1BF)),
+                ),
+                shadowColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: Text(
+                'CRIE SUA CONTA AGORA',
+                style: TextStyle(
+                  color: Color(0xFF43B1BF),
+                  letterSpacing: 1.25,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'OpenSans',
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -200,68 +149,61 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: <Widget>[
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                Color(0xFF43B1BF),
-                Color(0xFF533A71),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          height: double.infinity,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(
-              horizontal: 40.0,
-              vertical: 120.0,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Consumer<InvalidLoginController>(
-                  builder: (context, invalidLoginController, widget) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Entrar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 30.0),
-                    _buildEmailTF(),
-                    SizedBox(height: 30.0),
-                    _buildPasswordTF(),
-                    _buildForgotPasswordTF(),
-                    if (invalidLoginController.invalid)
+      body: Container(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 60.0),
+                child: Center(
+                  child: Image.asset('assets/Logo-color.png'),
+                ),
+              ),
+              Form(
+                key: _formKey,
+                child: Consumer<InvalidLoginController>(
+                    builder: (context, invalidLoginController, widget) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                       Text(
-                        'Login inválido! Verifique suas credenciais.',
+                        "Entrar",
                         style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 16,
+                          color: Colors.white,
+                          fontFamily: 'OpenSans',
+                          fontSize: 30.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    _buildLoginBtn(context, _formKey, invalidLoginController),
-                    _buildRedirectSignUpPage(context),
-                  ],
-                );
-              }),
-            ),
+                      SizedBox(height: 30.0),
+                      _buildEmailTF(),
+                      SizedBox(height: 20.0),
+                      _buildPasswordTF(),
+                      SizedBox(height: 40.0),
+                      if (invalidLoginController.invalid)
+                        Text(
+                          'Login inválido! Verifique suas credenciais.',
+                          style: TextStyle(
+                            color: Colors.redAccent,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      _buildLoginBtn(context, _formKey, invalidLoginController),
+                      SizedBox(height: 20.0),
+                      _buildRedirectSignUpPage(context),
+                      _buildForgotPasswordTF(),
+                    ],
+                  );
+                }),
+              ),
+            ],
           ),
         ),
-      ]),
+      ),
     );
   }
 }
