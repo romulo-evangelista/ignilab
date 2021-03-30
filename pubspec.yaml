@@ -27,3 +27,4 @@ flutter:
   assets:
     - assets/Logo.png
     - assets/Logo-color.png
+    - assets/Logo-letter.png

@@ -165,67 +165,89 @@ class SignUp extends StatelessWidget {
       body: Form(
         key: _formKey,
         child: Stack(children: <Widget>[
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF73AEF5),
-                  Color(0xFF61A4F1),
-                  Color(0xFF478DE0),
-                  Color(0xFF398AE5),
-                ],
-                stops: [0.1, 0.4, 0.7, 0.9],
-              ),
-            ),
-          ),
-          Container(
-            height: double.infinity,
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 80.0,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_rounded,
-                          color: Colors.white,
-                        ),
+          Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                        Color(0xFF533A71),
+                        Color(0xFF43B1BF),
+                      ],
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Center(
+                              child: Image.asset('assets/Logo-letter.png'),
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Novo Usuário",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                      Container(
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                            "Vamos começar com alguns dados básicos.",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 34,
+                              fontFamily: "FiraSans",
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 30.0),
-                  _buildEmailTF(),
-                  SizedBox(height: 20),
-                  _buildPasswordTF(),
-                  SizedBox(height: 30.0),
-                  _buildSignUpBtn(context, _formKey),
-                ],
+                ),
               ),
-            ),
+              Expanded(
+                flex: 4,
+                child: Container(
+                  color: Colors.white,
+                  height: 500.0,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 80.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 30.0),
+                        _buildEmailTF(),
+                        SizedBox(height: 20),
+                        _buildPasswordTF(),
+                        SizedBox(height: 30.0),
+                        _buildSignUpBtn(context, _formKey),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ]),
       ),

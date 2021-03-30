@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ignilab/controller/invalid_login_controller.dart';
 import 'package:ignilab/sign_up.dart';
+import 'package:ignilab/size_config.dart';
 import 'package:provider/provider.dart';
 import 'services/authentication_service.dart';
 
@@ -148,16 +149,20 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return Scaffold(
       body: Container(
         height: double.infinity,
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 40.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.safeBlockHorizontal * 5,
+            vertical: SizeConfig.safeBlockVertical * 15,
+          ),
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 60.0),
                 child: Center(
                   child: Image.asset('assets/Logo-color.png'),
                 ),
@@ -169,16 +174,7 @@ class Login extends StatelessWidget {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        "Entrar",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 40.0),
                       _buildEmailTF(),
                       SizedBox(height: 20.0),
                       _buildPasswordTF(),
