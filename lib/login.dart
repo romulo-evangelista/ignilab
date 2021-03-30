@@ -26,7 +26,7 @@ class Login extends StatelessWidget {
       decoration: InputDecoration(
         labelText: "Email",
         border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(14),
+        contentPadding: EdgeInsets.all(20),
       ),
       controller: emailController,
     );
@@ -45,25 +45,9 @@ class Login extends StatelessWidget {
       decoration: InputDecoration(
         labelText: "Senha",
         border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(14),
+        contentPadding: EdgeInsets.all(20),
       ),
       controller: passwordController,
-    );
-  }
-
-  Widget _buildForgotPasswordTF() {
-    return Container(
-      child: TextButton(
-        onPressed: () => print('botão pressionado - esqueci a senha'),
-        child: Text(
-          'Esqueceu sua senha?',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            fontFamily: "FiraSans",
-          ),
-        ),
-      ),
     );
   }
 
@@ -86,7 +70,7 @@ class Login extends StatelessWidget {
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
         ),
         child: Text(
           'LOGIN',
@@ -103,46 +87,48 @@ class Login extends StatelessWidget {
 
   Widget _buildRedirectSignUpPage(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          Text(
-            "Ainda não possui cadastro?",
+      child: Container(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SignUp()),
+          ),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
+            side: MaterialStateProperty.all<BorderSide>(
+              BorderSide(color: Color(0xFF43B1BF)),
+            ),
+            shadowColor: MaterialStateProperty.all<Color>(Colors.white),
+          ),
+          child: Text(
+            'CRIE SUA CONTA AGORA',
             style: TextStyle(
+              color: Color(0xFF43B1BF),
+              letterSpacing: 1.25,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: "FiraSans",
+              fontWeight: FontWeight.bold,
+              fontFamily: 'OpenSans',
             ),
           ),
-          SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignUp()),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                padding:
-                    MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-                side: MaterialStateProperty.all<BorderSide>(
-                  BorderSide(color: Color(0xFF43B1BF)),
-                ),
-                shadowColor: MaterialStateProperty.all<Color>(Colors.white),
-              ),
-              child: Text(
-                'CRIE SUA CONTA AGORA',
-                style: TextStyle(
-                  color: Color(0xFF43B1BF),
-                  letterSpacing: 1.25,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
-                ),
-              ),
-            ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForgotPasswordTF() {
+    return Container(
+      child: TextButton(
+        onPressed: () => print('botão pressionado - esqueci a senha'),
+        child: Text(
+          'Esqueceu sua senha?',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            fontFamily: "FiraSans",
           ),
-        ],
+        ),
       ),
     );
   }
@@ -156,9 +142,10 @@ class Login extends StatelessWidget {
         height: double.infinity,
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(
-            horizontal: SizeConfig.safeBlockHorizontal * 5,
-            vertical: SizeConfig.safeBlockVertical * 15,
+          padding: EdgeInsets.only(
+            top: SizeConfig.blockSizeVertical * 14,
+            left: SizeConfig.blockSizeVertical * 3,
+            right: SizeConfig.blockSizeVertical * 3,
           ),
           child: Column(
             children: [
@@ -174,11 +161,11 @@ class Login extends StatelessWidget {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 40.0),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 10),
                       _buildEmailTF(),
-                      SizedBox(height: 20.0),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 4),
                       _buildPasswordTF(),
-                      SizedBox(height: 40.0),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
                       if (invalidLoginController.invalid)
                         Text(
                           'Login inválido! Verifique suas credenciais.',
@@ -188,9 +175,18 @@ class Login extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 4),
                       _buildLoginBtn(context, _formKey, invalidLoginController),
-                      SizedBox(height: 20.0),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                      Text("Ainda não possui cadastro?",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "FiraSans",
+                          )),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
                       _buildRedirectSignUpPage(context),
+                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
                       _buildForgotPasswordTF(),
                     ],
                   );
