@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ignilab/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:ignilab/services/authentication_service.dart';
 
@@ -8,112 +9,90 @@ class SignUp extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  Widget _buildEmailTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Email',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Color(0xFF6CA8F1),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6.0,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            validator: (value) {
-              if (value.isEmpty) return 'Digite um email para cadastrar';
-              Pattern pattern =
-                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-              RegExp regex = new RegExp(pattern);
-              if (!regex.hasMatch(value)) return 'Digite um email válido';
+  Widget _buildTextFieldTF(label, controller) {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return '$label não pode ser nulo';
+        }
+        return null;
+      },
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      decoration: InputDecoration(
+        labelText: "$label",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: controller,
+    );
+  }
 
-              return null;
-            },
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(Icons.email, color: Colors.white),
-                hintText: 'Digite seu email',
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                  fontFamily: 'OpenSans',
-                )),
-            controller: emailController,
-          ),
-        ),
-      ],
+  Widget _buildEmailTF() {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) return 'Digite um email para cadastrar';
+        Pattern pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regex = new RegExp(pattern);
+        if (!regex.hasMatch(value)) return 'Digite um email válido';
+
+        return null;
+      },
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      decoration: InputDecoration(
+        labelText: "Email",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: emailController,
     );
   }
 
   Widget _buildPasswordTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Senha',
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Digite uma senha para cadastrar';
+        }
+        return null;
+      },
+      obscureText: true,
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      decoration: InputDecoration(
+        labelText: "Senha",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: passwordController,
+    );
+  }
+
+  Widget _buildNextBtn(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () async {
+          if (_formKey.currentState.validate()) {
+            var result = await context.read<AuthenticationService>().signIn(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim());
+          }
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
+        ),
+        child: Text(
+          'PRÓXIMO',
           style: TextStyle(
-            color: Colors.white,
+            letterSpacing: 1.25,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
             fontFamily: 'OpenSans',
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Color(0xFF6CA8F1),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6.0,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Digite uma senha para cadastrar';
-              }
-              return null;
-            },
-            obscureText: true,
-            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(Icons.lock, color: Colors.white),
-                hintText: 'Crie uma senha',
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                  fontFamily: 'OpenSans',
-                )),
-            controller: passwordController,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -161,95 +140,121 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController lastNameController = TextEditingController();
+
+    SizeConfig().init(context);
+
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Stack(children: <Widget>[
-          Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: <Color>[
-                        Color(0xFF533A71),
-                        Color(0xFF43B1BF),
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          TextButton(
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  Color(0xFF533A71),
+                  Color(0xFF43B1BF),
+                ],
+              ),
+            ),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding:
+                      EdgeInsets.only(top: SizeConfig.blockSizeVertical * 7),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          child: TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
                               color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Center(
-                              child: Image.asset('assets/Logo-letter.png'),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        child: Center(
-                          child: Text(
-                            "Vamos começar com alguns dados básicos.",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 34,
-                              fontFamily: "FiraSans",
+                              size: 20,
                             ),
                           ),
                         ),
                       ),
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Image.asset('assets/Logo-letter.png'),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Container(
-                  color: Colors.white,
-                  height: 500.0,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 80.0,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 30.0),
-                        _buildEmailTF(),
-                        SizedBox(height: 20),
-                        _buildPasswordTF(),
-                        SizedBox(height: 30.0),
-                        _buildSignUpBtn(context, _formKey),
-                      ],
+                Container(
+                  padding:
+                      EdgeInsets.only(top: SizeConfig.blockSizeVertical * 15),
+                  child: Text(
+                    "Vamos começar com alguns dados básicos.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 34,
+                      fontFamily: "FiraSans",
                     ),
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
-        ]),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 30),
+            child: Form(
+              key: _formKey,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.only(
+                        top: SizeConfig.blockSizeVertical * 4,
+                        left: SizeConfig.blockSizeVertical * 3,
+                        right: SizeConfig.blockSizeVertical * 3,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _buildTextFieldTF("Nome", nameController),
+                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
+                          _buildTextFieldTF("Sobrenome", lastNameController),
+                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
+                          _buildEmailTF(),
+                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
+                          _buildPasswordTF(),
+                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
+                          _buildPasswordTF(),
+                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
+                          _buildNextBtn(context),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
