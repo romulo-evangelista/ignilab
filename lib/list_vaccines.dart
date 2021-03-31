@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ignilab/size_config.dart';
-
 import 'edit_vaccine.dart';
 
 Future<void> _deleteVaccine(CollectionReference vaccines, String id) {
@@ -12,8 +11,6 @@ Future<void> _deleteVaccine(CollectionReference vaccines, String id) {
 
 class ListVaccines extends StatelessWidget {
   final currentUserEmail = FirebaseAuth.instance.currentUser.email;
-
-  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +36,11 @@ class ListVaccines extends StatelessWidget {
           );
         }
 
-        snapshot.data.docs.map((DocumentSnapshot document) =>
-            {if (currentUserEmail == document.data()['belongsTo']) counter++});
+        var finded = snapshot.data.docs.where((doc) {
+          return doc.data()['belongsTo'] == currentUserEmail;
+        });
 
-        if (counter > 0) {
+        if (finded.length > 0) {
           return ListView(
             shrinkWrap: true,
             children: snapshot.data.docs.map((DocumentSnapshot document) {
@@ -118,7 +116,11 @@ class ListVaccines extends StatelessWidget {
           return Container(
             child: Column(
               children: <Widget>[
-                Image.asset('assets/Vaccines-placeholder.png'),
+                Container(
+                  width: double.infinity,
+                  height: SizeConfig.screenHeight / 3,
+                  child: Image.asset('assets/Vaccines-placeholder.png'),
+                ),
                 SizedBox(height: SizeConfig.blockSizeVertical * 5),
                 Container(
                   width: SizeConfig.blockSizeHorizontal * 70,

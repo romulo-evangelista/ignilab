@@ -16,7 +16,7 @@ Widget _buildLogoutBtn(BuildContext context) {
       },
       child: Text(
         'Sair',
-        style: TextStyle(color: Colors.white, fontSize: 20),
+        style: TextStyle(color: Color(0xFF43B1BF), fontSize: 20),
       ),
     ),
   );
@@ -54,28 +54,13 @@ class Welcome extends StatelessWidget {
                     fontSize: 34,
                   ),
                 ),
-                SizedBox(height: SizeConfig.blockSizeVertical * 20),
+                SizedBox(height: SizeConfig.blockSizeVertical * 10),
                 ListVaccines(),
               ],
             ),
           ),
         ),
-        // Container(
-        //   alignment: Alignment.bottomRight,
-        //   padding: EdgeInsets.all(30),
-        //   child: FloatingActionButton(
-        //     onPressed: () => Navigator.push(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => AddVaccine()),
-        //     ),
-        //     child: Icon(
-        //       Icons.add,
-        //       color: Color(0xFF398AE5),
-        //       size: 40,
-        //     ),
-        //     backgroundColor: Colors.white,
-        //   ),
-        // ),
+        // _buildLogoutBtn(context),
       ]),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),

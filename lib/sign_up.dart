@@ -17,7 +17,7 @@ class SignUp extends StatelessWidget {
         }
         return null;
       },
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
         border: OutlineInputBorder(),
@@ -39,7 +39,7 @@ class SignUp extends StatelessWidget {
         return null;
       },
       keyboardType: TextInputType.emailAddress,
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "Email",
         border: OutlineInputBorder(),
@@ -58,7 +58,8 @@ class SignUp extends StatelessWidget {
         return null;
       },
       obscureText: true,
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      style: TextStyle(
+          fontFamily: 'OpenSans', fontSize: SizeConfig.screenHeight / 40),
       decoration: InputDecoration(
         labelText: "Senha",
         border: OutlineInputBorder(),
@@ -231,22 +232,30 @@ class SignUp extends StatelessWidget {
                         left: SizeConfig.blockSizeVertical * 3,
                         right: SizeConfig.blockSizeVertical * 3,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _buildTextFieldTF("Nome", nameController),
-                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
-                          _buildTextFieldTF("Sobrenome", lastNameController),
-                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
-                          _buildEmailTF(),
-                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
-                          _buildPasswordTF(),
-                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
-                          _buildPasswordTF(),
-                          SizedBox(height: SizeConfig.blockSizeHorizontal * 7),
-                          _buildNextBtn(context),
-                        ],
+                      child: Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _buildTextFieldTF("Nome", nameController),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildTextFieldTF("Sobrenome", lastNameController),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildEmailTF(),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildPasswordTF(),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildPasswordTF(),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildNextBtn(context),
+                          ],
+                        ),
                       ),
                     ),
                   ),

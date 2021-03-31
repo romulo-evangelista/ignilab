@@ -22,11 +22,11 @@ class Login extends StatelessWidget {
         return null;
       },
       keyboardType: TextInputType.emailAddress,
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "Email",
         border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(20),
+        contentPadding: EdgeInsets.all(SizeConfig.screenHeight / 42),
       ),
       controller: emailController,
     );
@@ -41,11 +41,11 @@ class Login extends StatelessWidget {
         return null;
       },
       obscureText: true,
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 16),
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "Senha",
         border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.all(20),
+        contentPadding: EdgeInsets.all(SizeConfig.screenHeight / 42),
       ),
       controller: passwordController,
     );
@@ -70,7 +70,8 @@ class Login extends StatelessWidget {
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
+          padding: MaterialStateProperty.all<EdgeInsets>(
+              EdgeInsets.all(SizeConfig.screenHeight / 42)),
         ),
         child: Text(
           'LOGIN',
@@ -143,9 +144,9 @@ class Login extends StatelessWidget {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.only(
-            top: SizeConfig.blockSizeVertical * 14,
-            left: SizeConfig.blockSizeVertical * 3,
-            right: SizeConfig.blockSizeVertical * 3,
+            top: SizeConfig.screenHeight / 8,
+            left: SizeConfig.screenHeight / 30,
+            right: SizeConfig.screenHeight / 30,
           ),
           child: Column(
             children: [
@@ -161,11 +162,11 @@ class Login extends StatelessWidget {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: SizeConfig.blockSizeVertical * 10),
+                      SizedBox(height: SizeConfig.screenHeight / 15),
                       _buildEmailTF(),
-                      SizedBox(height: SizeConfig.blockSizeVertical * 4),
+                      SizedBox(height: SizeConfig.screenHeight / 25),
                       _buildPasswordTF(),
-                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                      SizedBox(height: SizeConfig.screenHeight / 25),
                       if (invalidLoginController.invalid)
                         Text(
                           'Login inválido! Verifique suas credenciais.',
@@ -175,18 +176,18 @@ class Login extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      SizedBox(height: SizeConfig.blockSizeVertical * 4),
+                      SizedBox(height: SizeConfig.screenHeight / 40),
                       _buildLoginBtn(context, _formKey, invalidLoginController),
-                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                      SizedBox(height: SizeConfig.screenHeight / 50),
                       Text("Ainda não possui cadastro?",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             fontFamily: "FiraSans",
                           )),
-                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                      SizedBox(height: SizeConfig.screenHeight / 50),
                       _buildRedirectSignUpPage(context),
-                      SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                      SizedBox(height: SizeConfig.screenHeight / 50),
                       _buildForgotPasswordTF(),
                     ],
                   );
