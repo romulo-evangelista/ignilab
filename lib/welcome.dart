@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ignilab/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_vaccine.dart';
@@ -24,27 +26,14 @@ class Welcome extends StatelessWidget {
   final CollectionReference vaccines =
       FirebaseFirestore.instance.collection('vaccines');
 
+  final currentUserEmail = FirebaseAuth.instance.currentUser.email;
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return Scaffold(
       body: Stack(children: <Widget>[
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF73AEF5),
-                Color(0xFF61A4F1),
-                Color(0xFF478DE0),
-                Color(0xFF398AE5),
-              ],
-              stops: [0.1, 0.4, 0.7, 0.9],
-            ),
-          ),
-        ),
         Container(
           height: double.infinity,
           child: SingleChildScrollView(
@@ -57,45 +46,71 @@ class Welcome extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Vacinas",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    _buildLogoutBtn(context),
-                  ],
+                Text(
+                  "Olá, $currentUserEmail!",
+                  style: TextStyle(
+                    color: Color(0xFF533A71),
+                    fontFamily: 'Fira Sans',
+                    fontSize: 34,
+                  ),
                 ),
-                SizedBox(height: 30.0),
+                SizedBox(height: SizeConfig.blockSizeVertical * 20),
                 ListVaccines(),
               ],
             ),
           ),
         ),
-        Container(
-          alignment: Alignment.bottomRight,
-          padding: EdgeInsets.all(30),
-          child: FloatingActionButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddVaccine()),
-            ),
-            child: Icon(
-              Icons.add,
-              color: Color(0xFF398AE5),
-              size: 40,
-            ),
-            backgroundColor: Colors.white,
+        // Container(
+        //   alignment: Alignment.bottomRight,
+        //   padding: EdgeInsets.all(30),
+        //   child: FloatingActionButton(
+        //     onPressed: () => Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => AddVaccine()),
+        //     ),
+        //     child: Icon(
+        //       Icons.add,
+        //       color: Color(0xFF398AE5),
+        //       size: 40,
+        //     ),
+        //     backgroundColor: Colors.white,
+        //   ),
+        // ),
+      ]),
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 7,
+        color: Color(0xFF533A71),
+        child: Container(
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.menu, color: Colors.white),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.share, color: Colors.white),
+              ),
+            ],
           ),
         ),
-      ]),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddVaccine()),
+        ),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 40,
+        ),
+        backgroundColor: Color(0xFF43B1BF),
+      ),
     );
   }
 }
