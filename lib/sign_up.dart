@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ignilab/size_config.dart';
@@ -5,8 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:ignilab/services/authentication_service.dart';
 
 class SignUp extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   Widget _buildTextFieldTF(label, controller) {
@@ -81,6 +88,33 @@ class SignUp extends StatelessWidget {
     );
   }
 
+  Widget _buildConfirmPasswordTF() {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Confirme sua senha';
+        }
+        if (value != passwordController.text) {
+          return 'As senhas não coincidem, por favor digite novamente';
+        }
+        return null;
+      },
+      obscureText: true,
+      style: TextStyle(
+          fontFamily: 'OpenSans', fontSize: SizeConfig.screenHeight / 40),
+      decoration: InputDecoration(
+        labelText: "Confirme sua senha",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
+        border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: confirmPasswordController,
+    );
+  }
+
   Widget _buildNextBtn(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -111,11 +145,25 @@ class SignUp extends StatelessWidget {
 
   Widget _buildSignUpBtn(
     BuildContext context,
+    TextEditingController name,
+    TextEditingController lastName,
+    TextEditingController email,
     GlobalKey<FormState> _formKey,
   ) {
-    print(context);
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    Future<void> addUser() {
+      return users
+          .add({
+            'name': name.text,
+            'lastName': lastName.text,
+            'email': email.text,
+          })
+          .then((value) => print("Vaccine Added"))
+          .catchError((error) => print("Failed to add vaccine: $error"));
+    }
+
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
@@ -125,6 +173,7 @@ class SignUp extends StatelessWidget {
                 password: passwordController.text.trim());
 
             if (result == 'Conta criada') {
+              addUser();
               Navigator.pop(context);
             } else {
               print(result);
@@ -132,20 +181,17 @@ class SignUp extends StatelessWidget {
           }
         },
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          ),
+          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
         ),
         child: Text(
           'CADASTRAR',
           style: TextStyle(
-              color: Color(0xFF527DAA),
-              letterSpacing: 1.5,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans'),
+            letterSpacing: 1.25,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
         ),
       ),
     );
@@ -153,9 +199,6 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController lastNameController = TextEditingController();
-
     SizeConfig().init(context);
 
     return Scaffold(
@@ -263,7 +306,7 @@ class SignUp extends StatelessWidget {
                             _buildPasswordTF(),
                             SizedBox(
                                 height: SizeConfig.blockSizeHorizontal * 7),
-                            _buildPasswordTF(),
+                            _buildConfirmPasswordTF(),
                           ],
                         ),
                       ),
@@ -272,7 +315,13 @@ class SignUp extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
                     alignment: Alignment.bottomCenter,
-                    child: _buildNextBtn(context),
+                    child: _buildSignUpBtn(
+                      context,
+                      nameController,
+                      lastNameController,
+                      emailController,
+                      _formKey,
+                    ),
                   )
                 ],
               ),
