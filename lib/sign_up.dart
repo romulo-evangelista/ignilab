@@ -231,6 +231,7 @@ class SignUp extends StatelessWidget {
                         top: SizeConfig.blockSizeVertical * 4,
                         left: SizeConfig.blockSizeVertical * 3,
                         right: SizeConfig.blockSizeVertical * 3,
+                        bottom: SizeConfig.blockSizeVertical * 12,
                       ),
                       child: Container(
                         padding: EdgeInsets.only(bottom: 20),
@@ -251,14 +252,16 @@ class SignUp extends StatelessWidget {
                             SizedBox(
                                 height: SizeConfig.blockSizeHorizontal * 7),
                             _buildPasswordTF(),
-                            SizedBox(
-                                height: SizeConfig.blockSizeHorizontal * 7),
-                            _buildNextBtn(context),
                           ],
                         ),
                       ),
                     ),
                   ),
+                  Container(
+                    padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
+                    alignment: Alignment.bottomCenter,
+                    child: _buildNextBtn(context),
+                  )
                 ],
               ),
             ),

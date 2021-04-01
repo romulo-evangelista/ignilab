@@ -39,8 +39,8 @@ class Welcome extends StatelessWidget {
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 80.0,
+              horizontal: SizeConfig.blockSizeVertical * 3,
+              vertical: SizeConfig.blockSizeVertical * 8,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

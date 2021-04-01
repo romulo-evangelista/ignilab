@@ -165,8 +165,11 @@ class AddVaccine extends StatelessWidget {
             margin: EdgeInsets.only(top: SizeConfig.screenHeight / 7),
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: SizeConfig.blockSizeVertical * 3,
+              padding: EdgeInsets.only(
+                top: SizeConfig.blockSizeVertical * 3,
+                left: SizeConfig.blockSizeVertical * 3,
+                right: SizeConfig.blockSizeVertical * 3,
+                bottom: SizeConfig.blockSizeVertical * 16,
               ),
               child: Form(
                 key: _formKey,
