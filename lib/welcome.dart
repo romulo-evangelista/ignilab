@@ -6,27 +6,55 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_vaccine.dart';
 import 'list_vaccines.dart';
 
+Widget welcomeText(CollectionReference users, String currentUserEmail) {
+  return StreamBuilder<QuerySnapshot>(
+    stream: users.snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (snapshot.hasData) {
+        var result = snapshot.data.docs.where((doc) {
+          return doc.data()['email'] == currentUserEmail;
+        });
+        var message =
+            result.map((res) => "Olá, " + res.data()['name'] + "!").toString();
+        var welcome = message.substring(1, message.length - 1);
+
+        return Text(
+          welcome,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: Color(0xFF533A71),
+            fontFamily: 'Fira Sans',
+            fontSize: 34,
+          ),
+        );
+      } else {
+        return Container();
+      }
+    },
+  );
+}
+
 class Welcome extends StatelessWidget {
+  final currentUserEmail = FirebaseAuth.instance.currentUser.email;
+
   final CollectionReference vaccines =
       FirebaseFirestore.instance.collection('vaccines');
-
-  final currentUserEmail = FirebaseAuth.instance.currentUser.email;
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection('users');
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
     return Scaffold(
       key: _scaffoldKey,
-      drawer: SideMenu(
-        userName: currentUserEmail,
-      ),
+      drawer: SideMenu(),
       body: Stack(children: <Widget>[
         Container(
           color: Colors.white,
           width: double.infinity,
+          height: double.infinity,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Container(
@@ -37,12 +65,11 @@ class Welcome extends StatelessWidget {
               width: double.infinity,
               child: Column(
                 children: <Widget>[
-                  Text(
-                    "Olá, $currentUserEmail!",
-                    style: TextStyle(
-                      color: Color(0xFF533A71),
-                      fontFamily: 'Fira Sans',
-                      fontSize: 34,
+                  Container(
+                    width: double.infinity,
+                    child: welcomeText(
+                      users,
+                      currentUserEmail,
                     ),
                   ),
                   ListVaccines(),
