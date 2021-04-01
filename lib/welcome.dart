@@ -1,26 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ignilab/side_menu.dart';
 import 'package:ignilab/size_config.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_vaccine.dart';
 import 'list_vaccines.dart';
-import 'services/authentication_service.dart';
-
-Widget _buildLogoutBtn(BuildContext context) {
-  return Container(
-    alignment: Alignment.centerRight,
-    child: TextButton(
-      onPressed: () {
-        context.read<AuthenticationService>().signOut();
-      },
-      child: Text(
-        'Sair',
-        style: TextStyle(color: Color(0xFF43B1BF), fontSize: 20),
-      ),
-    ),
-  );
-}
 
 class Welcome extends StatelessWidget {
   final CollectionReference vaccines =
@@ -28,11 +12,17 @@ class Welcome extends StatelessWidget {
 
   final currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: SideMenu(
+        userName: currentUserEmail,
+      ),
       body: Stack(children: <Widget>[
         Container(
           color: Colors.white,
@@ -72,7 +62,9 @@ class Welcome extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _scaffoldKey.currentState.openDrawer();
+                },
                 icon: Icon(Icons.menu, color: Colors.white),
               ),
               IconButton(
