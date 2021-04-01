@@ -143,6 +143,7 @@ class AddVaccine extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
+            color: Colors.white,
             height: double.infinity,
             width: double.infinity,
             padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 7),
