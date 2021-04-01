@@ -2,169 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-Widget _buildTextFieldTF(label, controller) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'OpenSans',
-        ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-          color: Color(0xFF6CA8F1),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6.0,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: TextFormField(
-          validator: (value) {
-            if (value.isEmpty) {
-              return '$label não pode ser nulo';
-            }
-            return null;
-          },
-          style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(14),
-              hintText: '$label da vacina',
-              hintStyle: TextStyle(
-                color: Colors.white54,
-                fontFamily: 'OpenSans',
-              )),
-          controller: controller,
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _buildNumberFieldTF(label, controller) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'OpenSans',
-        ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-          color: Color(0xFF6CA8F1),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6.0,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: TextFormField(
-          validator: (value) {
-            if (value.isEmpty) {
-              return '$label não pode ser nulo';
-            }
-            return null;
-          },
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly
-          ],
-          style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(14),
-              hintText: '$label da vacina',
-              hintStyle: TextStyle(
-                color: Colors.white54,
-                fontFamily: 'OpenSans',
-              )),
-          controller: controller,
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _buildAddVaccineBtn(
-    BuildContext context,
-    TextEditingController name,
-    TextEditingController dose,
-    TextEditingController applicationDate,
-    TextEditingController modelOrManufacturer,
-    TextEditingController batch,
-    TextEditingController localOrHealthUnit,
-    GlobalKey<FormState> _formKey,
-    String currentUserEmail) {
-  CollectionReference vaccines =
-      FirebaseFirestore.instance.collection('vaccines');
-
-  Future<void> addVaccine() {
-    return vaccines
-        .add({
-          'name': name.text,
-          'dose': dose.text,
-          'applicationDate': applicationDate.text,
-          'modelOrManufacturer': modelOrManufacturer.text,
-          'batch': batch.text,
-          'localOrHealthUnit': localOrHealthUnit.text,
-          'belongsTo': currentUserEmail,
-        })
-        .then((value) => print("Vaccine Added"))
-        .catchError((error) => print("Failed to add vaccine: $error"));
-  }
-
-  return Container(
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState.validate()) {
-          addVaccine();
-          Navigator.pop(context);
-        }
-      },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        ),
-      ),
-      child: Text(
-        'ADICIONAR',
-        style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans'),
-      ),
-    ),
-  );
-}
+import 'package:ignilab/size_config.dart';
 
 class AddVaccine extends StatelessWidget {
   final currentUserEmail = FirebaseAuth.instance.currentUser.email;
@@ -181,96 +19,197 @@ class AddVaccine extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
+  Widget _buildTextFieldTF(label, controller) {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return '$label não pode ser nulo';
+        }
+        return null;
+      },
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+      decoration: InputDecoration(
+        labelText: "$label",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: controller,
+    );
+  }
+
+  Widget _buildNumberFieldTF(label, controller) {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return '$label não pode ser nulo';
+        }
+        return null;
+      },
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly
+      ],
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+      decoration: InputDecoration(
+        labelText: "$label",
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: controller,
+    );
+  }
+
+  Widget _buildDoseAndManufacturing(Widget dose, Widget manufacturing) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: SizeConfig.blockSizeHorizontal * 25,
+          child: dose,
+        ),
+        Container(
+          margin: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 30),
+          child: manufacturing,
+        )
+      ],
+    );
+  }
+
+  Widget _buildAddVaccineBtn(
+      BuildContext context,
+      TextEditingController name,
+      TextEditingController dose,
+      TextEditingController applicationDate,
+      TextEditingController modelOrManufacturer,
+      TextEditingController batch,
+      TextEditingController localOrHealthUnit,
+      GlobalKey<FormState> _formKey,
+      String currentUserEmail) {
+    CollectionReference vaccines =
+        FirebaseFirestore.instance.collection('vaccines');
+
+    Future<void> addVaccine() {
+      return vaccines
+          .add({
+            'name': name.text,
+            'dose': dose.text,
+            'applicationDate': applicationDate.text,
+            'modelOrManufacturer': modelOrManufacturer.text,
+            'batch': batch.text,
+            'localOrHealthUnit': localOrHealthUnit.text,
+            'belongsTo': currentUserEmail,
+          })
+          .then((value) => print("Vaccine Added"))
+          .catchError((error) => print("Failed to add vaccine: $error"));
+    }
+
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            addVaccine();
+            Navigator.pop(context);
+          }
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
+        ),
+        child: Text(
+          'ADICIONAR',
+          style: TextStyle(
+            letterSpacing: 1.25,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Stack(children: <Widget>[
+      body: Stack(
+        children: <Widget>[
           Container(
             height: double.infinity,
             width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF73AEF5),
-                  Color(0xFF61A4F1),
-                  Color(0xFF478DE0),
-                  Color(0xFF398AE5),
-                ],
-                stops: [0.1, 0.4, 0.7, 0.9],
+            padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 7),
+            alignment: Alignment.topLeft,
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: Color(0xFF533A71),
+                      size: 20,
+                    ),
+                  ),
+                ),
+                Text(
+                  "Nova vacina",
+                  style: TextStyle(color: Color(0xFF533A71), fontSize: 20),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            margin: EdgeInsets.only(top: SizeConfig.screenHeight / 7),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.blockSizeVertical * 3,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildTextFieldTF("Selecione uma vacina", nameController),
+                    SizedBox(height: 20),
+                    _buildDoseAndManufacturing(
+                      _buildNumberFieldTF('Dose', doseController),
+                      _buildTextFieldTF(
+                          "Modelo/Fabricante", modelOrManufacturerController),
+                    ),
+                    SizedBox(height: 20),
+                    _buildTextFieldTF(
+                        "Data da Aplicação", applicationDateController),
+                    SizedBox(height: 20),
+                    _buildTextFieldTF("Lote", batchController),
+                    SizedBox(height: 20),
+                    _buildTextFieldTF(
+                        "Local/Unidade de Saúde", localOrHealthUnitController),
+                  ],
+                ),
               ),
             ),
           ),
           Container(
-            height: double.infinity,
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 80.0,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "Nova Vacina",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30.0),
-                  _buildTextFieldTF("Nome", nameController),
-                  SizedBox(height: 20),
-                  _buildNumberFieldTF("Dose", doseController),
-                  SizedBox(height: 20),
-                  _buildTextFieldTF(
-                      "Data da Aplicação", applicationDateController),
-                  SizedBox(height: 20),
-                  _buildTextFieldTF(
-                      "Modelo/Fabricante", modelOrManufacturerController),
-                  SizedBox(height: 20),
-                  _buildTextFieldTF("Lote", batchController),
-                  SizedBox(height: 20),
-                  _buildTextFieldTF(
-                      "Local/Unidade de Saúde", localOrHealthUnitController),
-                  SizedBox(height: 40),
-                  _buildAddVaccineBtn(
-                    context,
-                    nameController,
-                    doseController,
-                    applicationDateController,
-                    modelOrManufacturerController,
-                    batchController,
-                    localOrHealthUnitController,
-                    _formKey,
-                    currentUserEmail,
-                  ),
-                ],
-              ),
+            padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
+            alignment: Alignment.bottomCenter,
+            child: _buildAddVaccineBtn(
+              context,
+              nameController,
+              doseController,
+              applicationDateController,
+              modelOrManufacturerController,
+              batchController,
+              localOrHealthUnitController,
+              _formKey,
+              currentUserEmail,
             ),
           ),
-        ]),
+        ],
       ),
     );
   }
