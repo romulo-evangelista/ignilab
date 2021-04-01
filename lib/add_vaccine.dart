@@ -219,6 +219,7 @@ class AddVaccine extends StatelessWidget {
                           fontFamily: "Roboto",
                           letterSpacing: 1.25,
                           fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

@@ -54,13 +54,47 @@ class Welcome extends StatelessWidget {
                     fontSize: 34,
                   ),
                 ),
+                SizedBox(height: SizeConfig.blockSizeVertical * 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        'Status de imunização',
+                        style: TextStyle(
+                          fontFamily: "Fira Sans",
+                          color: Color(0xFF828282),
+                          fontSize: 12,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                    Container(
+                      padding: EdgeInsets.all(SizeConfig.screenHeight / 100),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFD4EFDF),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Text(
+                        'IMUNIZADA',
+                        style: TextStyle(
+                          fontFamily: "Fira Sans",
+                          color: Color(0xFF27AE60),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.25,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 SizedBox(height: SizeConfig.blockSizeVertical * 10),
                 ListVaccines(),
               ],
             ),
           ),
         ),
-        _buildLogoutBtn(context),
       ]),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
