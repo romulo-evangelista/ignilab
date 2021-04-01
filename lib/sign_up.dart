@@ -20,7 +20,11 @@ class SignUp extends StatelessWidget {
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: controller,
@@ -42,7 +46,11 @@ class SignUp extends StatelessWidget {
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "Email",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: emailController,
@@ -62,7 +70,11 @@ class SignUp extends StatelessWidget {
           fontFamily: 'OpenSans', fontSize: SizeConfig.screenHeight / 40),
       decoration: InputDecoration(
         labelText: "Senha",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: passwordController,

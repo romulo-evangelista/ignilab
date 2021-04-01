@@ -22,7 +22,11 @@ class EditVaccine extends StatelessWidget {
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: controller,
@@ -44,7 +48,11 @@ class EditVaccine extends StatelessWidget {
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: controller,
@@ -69,12 +77,13 @@ class EditVaccine extends StatelessWidget {
   Widget _buildAddVaccineBtn(
       BuildContext context,
       String documentId,
-      TextEditingController name,
+      TextEditingController vaccine,
       TextEditingController dose,
+      TextEditingController manufacturer,
+      TextEditingController local,
       TextEditingController applicationDate,
-      TextEditingController modelOrManufacturer,
+      TextEditingController control,
       TextEditingController batch,
-      TextEditingController localOrHealthUnit,
       String documentBelongsTo,
       GlobalKey<FormState> _formKey) {
     CollectionReference vaccines =
@@ -84,12 +93,13 @@ class EditVaccine extends StatelessWidget {
       return vaccines
           .doc(documentId)
           .update({
-            'name': name.text,
+            'vaccine': vaccine.text,
             'dose': dose.text,
+            'manufacturer': manufacturer.text,
+            'local': local.text,
             'applicationDate': applicationDate.text,
-            'modelOrManufacturer': modelOrManufacturer.text,
+            'control': control.text,
             'batch': batch.text,
-            'localOrHealthUnit': localOrHealthUnit.text,
             'belongsTo': documentBelongsTo,
           })
           .then((value) => {print("Vaccine Updated")})
@@ -124,18 +134,20 @@ class EditVaccine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController =
-        TextEditingController(text: document.data()['name']);
+    final TextEditingController vaccineController =
+        TextEditingController(text: document.data()['vaccine']);
     final TextEditingController doseController =
         TextEditingController(text: document.data()['dose']);
+    final TextEditingController manufacturerController =
+        TextEditingController(text: document.data()['manufacturer']);
+    final TextEditingController localController =
+        TextEditingController(text: document.data()['local']);
     final TextEditingController applicationDateController =
         TextEditingController(text: document.data()['applicationDate']);
-    final TextEditingController modelOrManufacturerController =
-        TextEditingController(text: document.data()['modelOrManufacturer']);
+    final TextEditingController controlController =
+        TextEditingController(text: document.data()['control']);
     final TextEditingController batchController =
         TextEditingController(text: document.data()['batch']);
-    final TextEditingController localOrHealthUnitController =
-        TextEditingController(text: document.data()['localOrHealthUnit']);
 
     return Scaffold(
       body: Stack(children: <Widget>[
@@ -183,21 +195,51 @@ class EditVaccine extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _buildTextFieldTF("Nome", nameController),
+                  Text(
+                    "TODOS OS CAMPOS SÃO OBRIGATÓRIOS",
+                    style: TextStyle(
+                      fontSize: 10,
+                      letterSpacing: 1.5,
+                      color: Color(0xFF828282),
+                    ),
+                  ),
+                  SizedBox(height: 25),
+                  _buildTextFieldTF("Vacina", vaccineController),
                   SizedBox(height: 20),
                   _buildDoseAndManufacturing(
                     _buildNumberFieldTF('Dose', doseController),
-                    _buildTextFieldTF(
-                        "Modelo/Fabricante", modelOrManufacturerController),
+                    _buildTextFieldTF("Fabricante", manufacturerController),
                   ),
                   SizedBox(height: 20),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth / 7,
+                    ),
+                    padding: EdgeInsets.all(SizeConfig.screenWidth / 40),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFFE0E0E0)),
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    ),
+                    child: Text(
+                      "INFORMAÇÕES ADICIONAIS",
+                      style: TextStyle(
+                        color: Color(0xFF6200EE),
+                        fontFamily: "Roboto",
+                        letterSpacing: 1.25,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  _buildTextFieldTF("Local de vacinação", localController),
+                  SizedBox(height: 20),
                   _buildTextFieldTF(
-                      "Data da Aplicação", applicationDateController),
+                      "Data da aplicação", applicationDateController),
+                  SizedBox(height: 20),
+                  _buildTextFieldTF("Controle", controlController),
                   SizedBox(height: 20),
                   _buildTextFieldTF("Lote", batchController),
-                  SizedBox(height: 20),
-                  _buildTextFieldTF(
-                      "Local/Unidade de Saúde", localOrHealthUnitController),
                 ],
               ),
             ),
@@ -209,12 +251,13 @@ class EditVaccine extends StatelessWidget {
           child: _buildAddVaccineBtn(
             context,
             document.id,
-            nameController,
+            vaccineController,
             doseController,
+            manufacturerController,
+            localController,
             applicationDateController,
-            modelOrManufacturerController,
+            controlController,
             batchController,
-            localOrHealthUnitController,
             document.data()['belongsTo'],
             _formKey,
           ),

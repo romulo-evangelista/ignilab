@@ -60,7 +60,7 @@ class Welcome extends StatelessWidget {
             ),
           ),
         ),
-        // _buildLogoutBtn(context),
+        _buildLogoutBtn(context),
       ]),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),

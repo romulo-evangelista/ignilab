@@ -65,7 +65,7 @@ class ListVaccines extends StatelessWidget {
                         Expanded(
                           child: ListTile(
                             title: Text(
-                              document.data()['name'],
+                              document.data()['vaccine'],
                               style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',

@@ -7,15 +7,14 @@ import 'package:ignilab/size_config.dart';
 class AddVaccine extends StatelessWidget {
   final currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController vaccineController = TextEditingController();
   final TextEditingController doseController = TextEditingController();
+  final TextEditingController manufacturerController = TextEditingController();
+  final TextEditingController localController = TextEditingController();
   final TextEditingController applicationDateController =
       TextEditingController();
-  final TextEditingController modelOrManufacturerController =
-      TextEditingController();
+  final TextEditingController controlController = TextEditingController();
   final TextEditingController batchController = TextEditingController();
-  final TextEditingController localOrHealthUnitController =
-      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -30,7 +29,11 @@ class AddVaccine extends StatelessWidget {
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: controller,
@@ -52,7 +55,11 @@ class AddVaccine extends StatelessWidget {
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
         contentPadding: EdgeInsets.all(20),
       ),
       controller: controller,
@@ -76,12 +83,13 @@ class AddVaccine extends StatelessWidget {
 
   Widget _buildAddVaccineBtn(
       BuildContext context,
-      TextEditingController name,
+      TextEditingController vaccine,
       TextEditingController dose,
+      TextEditingController manufacturer,
+      TextEditingController local,
       TextEditingController applicationDate,
-      TextEditingController modelOrManufacturer,
+      TextEditingController control,
       TextEditingController batch,
-      TextEditingController localOrHealthUnit,
       GlobalKey<FormState> _formKey,
       String currentUserEmail) {
     CollectionReference vaccines =
@@ -90,12 +98,13 @@ class AddVaccine extends StatelessWidget {
     Future<void> addVaccine() {
       return vaccines
           .add({
-            'name': name.text,
+            'vaccine': vaccine.text,
             'dose': dose.text,
+            'manufacturer': manufacturer.text,
+            'local': local.text,
             'applicationDate': applicationDate.text,
-            'modelOrManufacturer': modelOrManufacturer.text,
+            'control': control.text,
             'batch': batch.text,
-            'localOrHealthUnit': localOrHealthUnit.text,
             'belongsTo': currentUserEmail,
           })
           .then((value) => print("Vaccine Added"))
@@ -166,7 +175,7 @@ class AddVaccine extends StatelessWidget {
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
-                top: SizeConfig.blockSizeVertical * 3,
+                top: SizeConfig.blockSizeVertical * 2,
                 left: SizeConfig.blockSizeVertical * 3,
                 right: SizeConfig.blockSizeVertical * 3,
                 bottom: SizeConfig.blockSizeVertical * 16,
@@ -177,21 +186,51 @@ class AddVaccine extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _buildTextFieldTF("Selecione uma vacina", nameController),
+                    Text(
+                      "TODOS OS CAMPOS SÃO OBRIGATÓRIOS",
+                      style: TextStyle(
+                        fontSize: 10,
+                        letterSpacing: 1.5,
+                        color: Color(0xFF828282),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    _buildTextFieldTF("Vacina", vaccineController),
                     SizedBox(height: 20),
                     _buildDoseAndManufacturing(
                       _buildNumberFieldTF('Dose', doseController),
-                      _buildTextFieldTF(
-                          "Modelo/Fabricante", modelOrManufacturerController),
+                      _buildTextFieldTF("Fabricante", manufacturerController),
                     ),
                     SizedBox(height: 20),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.screenWidth / 7,
+                      ),
+                      padding: EdgeInsets.all(SizeConfig.screenWidth / 40),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFFE0E0E0)),
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                      ),
+                      child: Text(
+                        "INFORMAÇÕES ADICIONAIS",
+                        style: TextStyle(
+                          color: Color(0xFF6200EE),
+                          fontFamily: "Roboto",
+                          letterSpacing: 1.25,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    _buildTextFieldTF("Local de vacinação", localController),
+                    SizedBox(height: 20),
                     _buildTextFieldTF(
-                        "Data da Aplicação", applicationDateController),
+                        "Data da aplicação", applicationDateController),
+                    SizedBox(height: 20),
+                    _buildTextFieldTF("Controle", controlController),
                     SizedBox(height: 20),
                     _buildTextFieldTF("Lote", batchController),
-                    SizedBox(height: 20),
-                    _buildTextFieldTF(
-                        "Local/Unidade de Saúde", localOrHealthUnitController),
                   ],
                 ),
               ),
@@ -202,12 +241,13 @@ class AddVaccine extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: _buildAddVaccineBtn(
               context,
-              nameController,
+              vaccineController,
               doseController,
+              manufacturerController,
+              localController,
               applicationDateController,
-              modelOrManufacturerController,
+              controlController,
               batchController,
-              localOrHealthUnitController,
               _formKey,
               currentUserEmail,
             ),
