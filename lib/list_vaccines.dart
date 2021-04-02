@@ -9,6 +9,38 @@ Future<void> _deleteVaccine(CollectionReference vaccines, String id) {
   return vaccines.doc(id).delete();
 }
 
+Widget imunized(CollectionReference users, String currentUserEmail) {
+  return StreamBuilder<QuerySnapshot>(
+    stream: users.snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (snapshot.hasData) {
+        var result = snapshot.data.docs.where((doc) {
+          return doc.data()['email'] == currentUserEmail;
+        });
+        var message = result
+            .map((res) =>
+                res.data()['gender'] == 'Feminino' ? 'IMUNIZADA' : 'IMUNIZADO')
+            .toString();
+
+        var text = message.substring(1, message.length - 1);
+
+        return Text(
+          text,
+          style: TextStyle(
+            fontFamily: "Fira Sans",
+            color: Color(0xFF27AE60),
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.25,
+          ),
+        );
+      } else {
+        return Container();
+      }
+    },
+  );
+}
+
 class ListVaccines extends StatelessWidget {
   final currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
@@ -16,6 +48,8 @@ class ListVaccines extends StatelessWidget {
   Widget build(BuildContext context) {
     CollectionReference vaccines =
         FirebaseFirestore.instance.collection('vaccines');
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
 
     SizeConfig().init(context);
 
@@ -72,16 +106,7 @@ class ListVaccines extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
                             ),
-                            child: Text(
-                              'IMUNIZADA',
-                              style: TextStyle(
-                                fontFamily: "Fira Sans",
-                                color: Color(0xFF27AE60),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 1.25,
-                              ),
-                            ),
+                            child: imunized(users, currentUserEmail),
                           )
                         ],
                       ),
