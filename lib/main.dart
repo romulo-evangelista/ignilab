@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ignilab/controller/gender_select_controller.dart';
 import 'package:ignilab/controller/invalid_login_controller.dart';
 import 'package:ignilab/services/authentication_service.dart';
 import 'package:ignilab/login.dart';
@@ -26,7 +27,9 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   context.read<AuthenticationService>().authStateChanges),
           ChangeNotifierProvider<InvalidLoginController>.value(
-              value: InvalidLoginController())
+              value: InvalidLoginController()),
+          ChangeNotifierProvider<GenderSelectController>.value(
+              value: GenderSelectController())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ignilab/controller/gender_select_controller.dart';
 import 'package:ignilab/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:ignilab/services/authentication_service.dart';
@@ -53,6 +54,39 @@ Widget _buildEmailTF(TextEditingController emailController) {
   );
 }
 
+Widget _buildDropdownTF(String selected, Function selectChanged) {
+  return DropdownButtonFormField(
+    value: selected,
+    onChanged: (value) {
+      selectChanged(value);
+    },
+    items: <DropdownMenuItem>[
+      DropdownMenuItem<String>(
+          value: 'Feminino',
+          child: Text(
+            'Feminino',
+            style: TextStyle(color: Color(0xFF787878)),
+          )),
+      DropdownMenuItem<String>(
+          value: 'Masculino',
+          child: Text(
+            'Masculino',
+            style: TextStyle(color: Color(0xFF787878)),
+          )),
+    ],
+    style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+    decoration: InputDecoration(
+      labelText: "Sexo",
+      labelStyle: TextStyle(color: Color(0xFF787878)),
+      border: OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      contentPadding: EdgeInsets.all(20),
+    ),
+  );
+}
+
 Widget _buildPasswordTF(TextEditingController passwordController) {
   return TextFormField(
     validator: (value) {
@@ -62,8 +96,7 @@ Widget _buildPasswordTF(TextEditingController passwordController) {
       return null;
     },
     obscureText: true,
-    style: TextStyle(
-        fontFamily: 'OpenSans', fontSize: SizeConfig.screenHeight / 40),
+    style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
     decoration: InputDecoration(
       labelText: "Senha",
       labelStyle: TextStyle(color: Color(0xFF787878)),
@@ -92,8 +125,7 @@ Widget _buildConfirmPasswordTF(
       return null;
     },
     obscureText: true,
-    style: TextStyle(
-        fontFamily: 'OpenSans', fontSize: SizeConfig.screenHeight / 40),
+    style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
     decoration: InputDecoration(
       labelText: "Confirme sua senha",
       labelStyle: TextStyle(color: Color(0xFF787878)),
@@ -148,6 +180,7 @@ Widget _buildSignUpBtn(
   TextEditingController lastNameController,
   TextEditingController emailController,
   TextEditingController passwordController,
+  String gender,
   GlobalKey<FormState> _formKey,
 ) {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -158,6 +191,7 @@ Widget _buildSignUpBtn(
           'name': nameController.text,
           'lastName': lastNameController.text,
           'email': emailController.text,
+          'gender': gender,
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
@@ -280,67 +314,78 @@ class SignUp extends StatelessWidget {
             margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 30),
             child: Form(
               key: _formKey,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+              child: Consumer<GenderSelectController>(
+                  builder: (context, genderSelectController, widget) {
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
                       ),
-                    ),
-                    child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.only(
-                        top: SizeConfig.blockSizeVertical * 4,
-                        left: SizeConfig.blockSizeVertical * 3,
-                        right: SizeConfig.blockSizeVertical * 3,
-                        bottom: SizeConfig.blockSizeVertical * 12,
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            _buildTextFieldTF("Nome", nameController),
-                            SizedBox(
-                                height: SizeConfig.blockSizeHorizontal * 7),
-                            _buildTextFieldTF("Sobrenome", lastNameController),
-                            SizedBox(
-                                height: SizeConfig.blockSizeHorizontal * 7),
-                            _buildEmailTF(emailController),
-                            SizedBox(
-                                height: SizeConfig.blockSizeHorizontal * 7),
-                            _buildPasswordTF(passwordController),
-                            SizedBox(
-                                height: SizeConfig.blockSizeHorizontal * 7),
-                            _buildConfirmPasswordTF(
-                              passwordController,
-                              confirmPasswordController,
-                            ),
-                          ],
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        padding: EdgeInsets.only(
+                          top: SizeConfig.blockSizeVertical * 4,
+                          left: SizeConfig.blockSizeVertical * 3,
+                          right: SizeConfig.blockSizeVertical * 3,
+                          bottom: SizeConfig.blockSizeVertical * 12,
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _buildTextFieldTF("Nome", nameController),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeHorizontal * 7),
+                              _buildTextFieldTF(
+                                  "Sobrenome", lastNameController),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeHorizontal * 7),
+                              _buildDropdownTF(
+                                genderSelectController.selected,
+                                genderSelectController.changeGender,
+                              ),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeHorizontal * 7),
+                              _buildEmailTF(emailController),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeHorizontal * 7),
+                              _buildPasswordTF(passwordController),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeHorizontal * 7),
+                              _buildConfirmPasswordTF(
+                                passwordController,
+                                confirmPasswordController,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
-                    alignment: Alignment.bottomCenter,
-                    child: _buildSignUpBtn(
-                      context,
-                      nameController,
-                      lastNameController,
-                      emailController,
-                      passwordController,
-                      _formKey,
-                    ),
-                  )
-                ],
-              ),
+                    Container(
+                      padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
+                      alignment: Alignment.bottomCenter,
+                      child: _buildSignUpBtn(
+                        context,
+                        nameController,
+                        lastNameController,
+                        emailController,
+                        passwordController,
+                        genderSelectController.selected,
+                        _formKey,
+                      ),
+                    )
+                  ],
+                );
+              }),
             ),
           ),
         ],
