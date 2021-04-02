@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:ignilab/size_config.dart';
 import 'edit_vaccine.dart';
 
-Future<void> _deleteVaccine(CollectionReference vaccines, String id) {
-  return vaccines.doc(id).delete();
-}
-
 Widget imunized(CollectionReference users, String currentUserEmail) {
   return StreamBuilder<QuerySnapshot>(
     stream: users.snapshots(),
@@ -257,14 +253,6 @@ class ListVaccines extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-
-                                  // Expanded(
-                                  //   child: TextButton(
-                                  //     child: Icon(Icons.delete),
-                                  //     onPressed: () async =>
-                                  //         _deleteVaccine(vaccines, document.id),
-                                  //   ),
-                                  // )
                                 ],
                               ),
                             ),

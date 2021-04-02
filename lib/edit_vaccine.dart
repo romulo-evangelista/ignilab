@@ -4,75 +4,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ignilab/size_config.dart';
 
+Future<void> _deleteVaccine(String id) {
+  CollectionReference vaccines =
+      FirebaseFirestore.instance.collection('vaccines');
+  return vaccines.doc(id).delete();
+}
+
+Widget _buildTextFieldTF(label, controller) {
+  return TextFormField(
+    validator: (value) {
+      if (value.isEmpty) {
+        return '$label não pode ser nulo';
+      }
+      return null;
+    },
+    style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+    decoration: InputDecoration(
+      labelText: "$label",
+      labelStyle: TextStyle(color: Color(0xFF787878)),
+      border: OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      contentPadding: EdgeInsets.all(20),
+    ),
+    controller: controller,
+  );
+}
+
+Widget _buildNumberFieldTF(label, controller) {
+  return TextFormField(
+    validator: (value) {
+      if (value.isEmpty) {
+        return '$label não pode ser nulo';
+      }
+      return null;
+    },
+    keyboardType: TextInputType.number,
+    inputFormatters: <TextInputFormatter>[
+      FilteringTextInputFormatter.digitsOnly
+    ],
+    style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+    decoration: InputDecoration(
+      labelText: "$label",
+      labelStyle: TextStyle(color: Color(0xFF787878)),
+      border: OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      contentPadding: EdgeInsets.all(20),
+    ),
+    controller: controller,
+  );
+}
+
+Widget _buildDoseAndManufacturing(Widget dose, Widget manufacturing) {
+  return Stack(
+    children: <Widget>[
+      Container(
+        width: SizeConfig.blockSizeHorizontal * 25,
+        child: dose,
+      ),
+      Container(
+        margin: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 30),
+        child: manufacturing,
+      )
+    ],
+  );
+}
+
 class EditVaccine extends StatelessWidget {
   final DocumentSnapshot document;
 
   EditVaccine({this.document});
 
   final _formKey = GlobalKey<FormState>();
-
-  Widget _buildTextFieldTF(label, controller) {
-    return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return '$label não pode ser nulo';
-        }
-        return null;
-      },
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
-      decoration: InputDecoration(
-        labelText: "$label",
-        labelStyle: TextStyle(color: Color(0xFF787878)),
-        border: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-        contentPadding: EdgeInsets.all(20),
-      ),
-      controller: controller,
-    );
-  }
-
-  Widget _buildNumberFieldTF(label, controller) {
-    return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return '$label não pode ser nulo';
-        }
-        return null;
-      },
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
-      ],
-      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
-      decoration: InputDecoration(
-        labelText: "$label",
-        labelStyle: TextStyle(color: Color(0xFF787878)),
-        border: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-        contentPadding: EdgeInsets.all(20),
-      ),
-      controller: controller,
-    );
-  }
-
-  Widget _buildDoseAndManufacturing(Widget dose, Widget manufacturing) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          width: SizeConfig.blockSizeHorizontal * 25,
-          child: dose,
-        ),
-        Container(
-          margin: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 30),
-          child: manufacturing,
-        )
-      ],
-    );
-  }
 
   Widget _buildAddVaccineBtn(
       BuildContext context,
@@ -159,21 +165,38 @@ class EditVaccine extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: Row(
             children: <Widget>[
-              Container(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Color(0xFF533A71),
-                    size: 20,
-                  ),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  children: [
+                    Container(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: Color(0xFF533A71),
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Editar vacina",
+                      style: TextStyle(color: Color(0xFF533A71), fontSize: 20),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                "Editar vacina",
-                style: TextStyle(color: Color(0xFF533A71), fontSize: 20),
+              Expanded(
+                flex: 2,
+                child: TextButton(
+                  child: Text(
+                    'Deletar vacina',
+                    style: TextStyle(color: Color(0xFFFF6961)),
+                  ),
+                  onPressed: () async => _deleteVaccine(document.id),
+                ),
               ),
             ],
           ),
