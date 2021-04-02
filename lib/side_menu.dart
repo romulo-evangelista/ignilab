@@ -13,7 +13,7 @@ Widget userNameText(CollectionReference users, String currentUserEmail) {
           return doc.data()['email'] == currentUserEmail;
         });
         var message = result
-            .map((res) => res.data()['name'] + res.data()['lastName'])
+            .map((res) => res.data()['name'] + ' ' + res.data()['lastName'])
             .toString();
         var welcome = message.substring(1, message.length - 1);
 
