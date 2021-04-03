@@ -220,7 +220,10 @@ class EditVaccine extends StatelessWidget {
                     'Deletar vacina',
                     style: TextStyle(color: Color(0xFFFF6961)),
                   ),
-                  onPressed: () async => _deleteVaccine(document.id),
+                  onPressed: () async => {
+                    _deleteVaccine(document.id),
+                    Navigator.pop(context),
+                  },
                 ),
               ),
             ],
