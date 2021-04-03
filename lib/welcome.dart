@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:ignilab/side_menu.dart';
 import 'package:ignilab/size_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
 import 'add_vaccine.dart';
 import 'list_vaccines.dart';
+
+Future<void> _takeScreenshot(ScreenshotController _screenshotController) async {
+  var imageFile = await _screenshotController.capture();
+  Share.shareFiles([imageFile.path]);
+}
 
 Widget welcomeText(CollectionReference users, String currentUserEmail) {
   return StreamBuilder<QuerySnapshot>(
@@ -44,9 +51,12 @@ class Welcome extends StatelessWidget {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
+  final _screenshotController = ScreenshotController();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: SideMenu(),
@@ -58,21 +68,25 @@ class Welcome extends StatelessWidget {
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: SizeConfig.blockSizeVertical * 3,
-                vertical: SizeConfig.blockSizeVertical * 8,
-              ),
               width: double.infinity,
               child: Column(
                 children: <Widget>[
                   Container(
+                    padding: EdgeInsets.only(
+                      top: SizeConfig.blockSizeVertical * 8,
+                      left: SizeConfig.blockSizeVertical * 3,
+                      right: SizeConfig.blockSizeVertical * 3,
+                    ),
                     width: double.infinity,
                     child: welcomeText(
                       users,
                       currentUserEmail,
                     ),
                   ),
-                  ListVaccines(),
+                  Screenshot(
+                    child: ListVaccines(),
+                    controller: _screenshotController,
+                  ),
                 ],
               ),
             ),
@@ -95,7 +109,7 @@ class Welcome extends StatelessWidget {
                 icon: Icon(Icons.menu, color: Colors.white),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => _takeScreenshot(_screenshotController),
                 icon: Icon(Icons.share, color: Colors.white),
               ),
             ],

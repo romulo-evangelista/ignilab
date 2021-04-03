@@ -18,6 +18,8 @@ dependencies:
 
   provider: ^4.3.3
   easy_mask: ^1.1.5
+  screenshot: 0.2.0
+  share: ^2.0.1
 
 dev_dependencies:
   flutter_test:
