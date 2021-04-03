@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_mask/easy_mask.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -78,6 +79,30 @@ class AddVaccine extends StatelessWidget {
           child: manufacturing,
         )
       ],
+    );
+  }
+
+  Widget _buildDateTF(label, controller) {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return '$label não pode ser nulo';
+        }
+        return null;
+      },
+      keyboardType: TextInputType.number,
+      inputFormatters: [TextInputMask(mask: '99/99/9999')],
+      style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+      decoration: InputDecoration(
+        labelText: "$label",
+        labelStyle: TextStyle(color: Color(0xFF787878)),
+        border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+        ),
+        contentPadding: EdgeInsets.all(20),
+      ),
+      controller: controller,
     );
   }
 
@@ -227,7 +252,7 @@ class AddVaccine extends StatelessWidget {
                     SizedBox(height: 20),
                     _buildTextFieldTF("Local de vacinação", localController),
                     SizedBox(height: 20),
-                    _buildTextFieldTF(
+                    _buildDateTF(
                         "Data da aplicação", applicationDateController),
                     SizedBox(height: 20),
                     _buildTextFieldTF("Controle", controlController),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ignilab/size_config.dart';
+import 'package:easy_mask/easy_mask.dart';
 
 Future<void> _deleteVaccine(String id) {
   CollectionReference vaccines =
@@ -44,6 +45,30 @@ Widget _buildNumberFieldTF(label, controller) {
     inputFormatters: <TextInputFormatter>[
       FilteringTextInputFormatter.digitsOnly
     ],
+    style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
+    decoration: InputDecoration(
+      labelText: "$label",
+      labelStyle: TextStyle(color: Color(0xFF787878)),
+      border: OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      contentPadding: EdgeInsets.all(20),
+    ),
+    controller: controller,
+  );
+}
+
+Widget _buildDateTF(label, controller) {
+  return TextFormField(
+    validator: (value) {
+      if (value.isEmpty) {
+        return '$label não pode ser nulo';
+      }
+      return null;
+    },
+    keyboardType: TextInputType.number,
+    inputFormatters: [TextInputMask(mask: '99/99/9999')],
     style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
     decoration: InputDecoration(
       labelText: "$label",
@@ -259,8 +284,7 @@ class EditVaccine extends StatelessWidget {
                   SizedBox(height: 20),
                   _buildTextFieldTF("Local de vacinação", localController),
                   SizedBox(height: 20),
-                  _buildTextFieldTF(
-                      "Data da aplicação", applicationDateController),
+                  _buildDateTF("Data da aplicação", applicationDateController),
                   SizedBox(height: 20),
                   _buildTextFieldTF("Controle", controlController),
                   SizedBox(height: 20),
