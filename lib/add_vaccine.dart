@@ -199,7 +199,11 @@ class AddVaccine extends StatelessWidget {
                 ),
                 Text(
                   "Nova vacina",
-                  style: TextStyle(color: Color(0xFF533A71), fontSize: 20),
+                  style: TextStyle(
+                    color: Color(0xFF533A71),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),

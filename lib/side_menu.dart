@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ignilab/view_profile.dart';
 import 'package:ignilab/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 
@@ -91,24 +92,31 @@ class SideMenu extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewProfile(),
+                ),
+              )
+            },
           ),
-          ListTile(
-            leading: Icon(
-              Icons.emoji_emotions_outlined,
-              size: 35,
-            ),
-            title: Text(
-              'Dê-nos seu feedback',
-              style: TextStyle(
-                fontFamily: "Fira Sans",
-                color: Color(0xFF828282),
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-            ),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.emoji_emotions_outlined,
+          //     size: 35,
+          //   ),
+          //   title: Text(
+          //     'Dê-nos seu feedback',
+          //     style: TextStyle(
+          //       fontFamily: "Fira Sans",
+          //       color: Color(0xFF828282),
+          //       fontWeight: FontWeight.w500,
+          //       fontSize: 14,
+          //     ),
+          //   ),
+          //   onTap: () => {Navigator.of(context).pop()},
+          // ),
           ListTile(
             leading: Icon(
               Icons.exit_to_app_outlined,
