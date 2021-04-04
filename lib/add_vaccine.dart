@@ -88,10 +88,20 @@ class AddVaccine extends StatelessWidget {
         if (value.isEmpty) {
           return '$label não pode ser nulo';
         }
+        final components = value.split("/");
+        if (components.length == 3) {
+          final day = int.tryParse(components[0]);
+          final month = int.tryParse(components[1]);
+          final year = int.tryParse(components[2]);
+          final actualDate = new DateTime.now();
+          if (day > 31 || month > 12 || year > actualDate.year) {
+            return "Data inválida";
+          }
+        }
         return null;
       },
       keyboardType: TextInputType.number,
-      inputFormatters: [TextInputMask(mask: '99/99/9999')],
+      inputFormatters: [TextInputMask(mask: '99/99/9999', reverse: false)],
       style: TextStyle(fontFamily: 'OpenSans', fontSize: 18),
       decoration: InputDecoration(
         labelText: "$label",
