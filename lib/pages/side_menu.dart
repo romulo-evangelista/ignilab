@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ignilab/view_profile.dart';
-import 'package:ignilab/services/authentication_service.dart';
 import 'package:provider/provider.dart';
+
+import 'package:ignilab/pages/profile/view_profile.dart';
+import 'package:ignilab/services/authentication_service.dart';
 
 Widget userNameText(CollectionReference users, String currentUserEmail) {
   return StreamBuilder<QuerySnapshot>(

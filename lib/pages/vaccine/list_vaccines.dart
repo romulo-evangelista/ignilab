@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ignilab/size_config.dart';
-import 'edit_vaccine.dart';
+
+import 'package:ignilab/config/size_config.dart';
+import 'package:ignilab/pages/vaccine/edit_vaccine.dart';
 
 Widget imunized(CollectionReference users, String currentUserEmail) {
   return StreamBuilder<QuerySnapshot>(

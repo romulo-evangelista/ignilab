@@ -1,12 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ignilab/side_menu.dart';
-import 'package:ignilab/size_config.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
-import 'add_vaccine.dart';
-import 'list_vaccines.dart';
+
+import 'package:ignilab/config/size_config.dart';
+import 'package:ignilab/pages/side_menu.dart';
+import 'package:ignilab/pages/vaccine/add_vaccine.dart';
+import 'package:ignilab/pages/vaccine/list_vaccines.dart';
 
 Future<void> _takeScreenshot(ScreenshotController _screenshotController) async {
   var imageFile = await _screenshotController.capture();
@@ -49,7 +50,7 @@ class Welcome extends StatelessWidget {
   final CollectionReference users =
       FirebaseFirestore.instance.collection('users');
 
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _screenshotController = ScreenshotController();
 

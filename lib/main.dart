@@ -1,14 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+
 import 'package:ignilab/controller/gender_select_controller.dart';
 import 'package:ignilab/controller/invalid_login_controller.dart';
 import 'package:ignilab/services/authentication_service.dart';
-import 'package:ignilab/login.dart';
-import 'package:ignilab/splash.dart';
-import 'package:ignilab/welcome.dart';
-import 'package:provider/provider.dart';
+import 'package:ignilab/pages/auth/login.dart';
+import 'package:ignilab/pages/splash.dart';
+import 'package:ignilab/pages/welcome.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

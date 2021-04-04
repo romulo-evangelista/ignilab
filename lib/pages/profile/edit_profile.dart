@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ignilab/controller/gender_select_controller.dart';
-import 'package:ignilab/size_config.dart';
 import 'package:provider/provider.dart';
+
+import 'package:ignilab/config/size_config.dart';
+import 'package:ignilab/controller/gender_select_controller.dart';
 
 Widget _buildTextFieldTF(label, controller) {
   return TextFormField(

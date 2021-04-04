@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ignilab/controller/invalid_login_controller.dart';
-import 'package:ignilab/sign_up.dart';
-import 'package:ignilab/size_config.dart';
 import 'package:provider/provider.dart';
-import 'services/authentication_service.dart';
+
+import 'package:ignilab/config/size_config.dart';
+import 'package:ignilab/controller/invalid_login_controller.dart';
+import 'package:ignilab/pages/auth/sign_up.dart';
+import 'package:ignilab/services/authentication_service.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();

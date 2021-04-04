@@ -3,7 +3,8 @@ import 'package:easy_mask/easy_mask.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ignilab/size_config.dart';
+
+import 'package:ignilab/config/size_config.dart';
 
 class AddVaccine extends StatelessWidget {
   final currentUserEmail = FirebaseAuth.instance.currentUser.email;
