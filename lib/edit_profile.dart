@@ -101,6 +101,8 @@ class EditProfile extends StatelessWidget {
       GlobalKey<FormState> _formKey) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+    print(gender);
+
     Future<void> editUser(String userId) {
       return users
           .doc(documentId)
@@ -140,6 +142,8 @@ class EditProfile extends StatelessWidget {
     );
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -150,8 +154,6 @@ class EditProfile extends StatelessWidget {
         TextEditingController(text: document.data()['lastName']);
     final TextEditingController emailController =
         TextEditingController(text: document.data()['email']);
-
-    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Stack(
@@ -194,16 +196,20 @@ class EditProfile extends StatelessWidget {
           Container(
             width: double.infinity,
             height: double.infinity,
-            margin: EdgeInsets.only(top: SizeConfig.screenHeight / 7),
-            child: Form(
-              key: _formKey,
-              child: Consumer<GenderSelectController>(
-                  builder: (context, genderSelectController, widget) {
-                return Stack(
+            padding: EdgeInsets.only(top: SizeConfig.screenHeight / 7),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(
+                top: SizeConfig.blockSizeVertical * 3,
+                left: SizeConfig.blockSizeVertical * 3,
+                right: SizeConfig.blockSizeVertical * 3,
+                bottom: SizeConfig.blockSizeVertical * 16,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
                   children: <Widget>[
                     Container(
-                      width: double.infinity,
-                      height: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -211,58 +217,51 @@ class EditProfile extends StatelessWidget {
                           topRight: Radius.circular(20),
                         ),
                       ),
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        padding: EdgeInsets.only(
-                          top: SizeConfig.blockSizeVertical * 4,
-                          left: SizeConfig.blockSizeVertical * 3,
-                          right: SizeConfig.blockSizeVertical * 3,
-                          bottom: SizeConfig.blockSizeVertical * 12,
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.only(bottom: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              _buildTextFieldTF("Nome", nameController),
-                              SizedBox(
-                                  height: SizeConfig.blockSizeHorizontal * 7),
-                              _buildTextFieldTF(
-                                  "Sobrenome", lastNameController),
-                              SizedBox(
-                                  height: SizeConfig.blockSizeHorizontal * 7),
-                              _buildDropdownTF(
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            _buildTextFieldTF("Nome", nameController),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildTextFieldTF("Sobrenome", lastNameController),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            Consumer<GenderSelectController>(builder:
+                                (context, genderSelectController, widget) {
+                              return _buildDropdownTF(
                                 document.data()['gender'] != null
                                     ? document.data()['gender']
                                     : genderSelectController.selected,
                                 genderSelectController.changeGender,
-                              ),
-                              SizedBox(
-                                  height: SizeConfig.blockSizeHorizontal * 7),
-                              _buildEmailTF(emailController),
-                            ],
-                          ),
+                              );
+                            }),
+                            SizedBox(
+                                height: SizeConfig.blockSizeHorizontal * 7),
+                            _buildEmailTF(emailController),
+                          ],
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
-                      alignment: Alignment.bottomCenter,
-                      child: _buildEditProfileBtn(
-                        context,
-                        document.id,
-                        nameController,
-                        lastNameController,
-                        genderSelectController.selected,
-                        emailController,
-                        _formKey,
-                      ),
-                    )
                   ],
-                );
-              }),
+                ),
+              ),
             ),
+          ),
+          Container(
+            padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
+            alignment: Alignment.bottomCenter,
+            child: Consumer<GenderSelectController>(
+                builder: (context, genderSelectController, widget) {
+              return _buildEditProfileBtn(
+                context,
+                document.id,
+                nameController,
+                lastNameController,
+                genderSelectController.selected,
+                emailController,
+                _formKey,
+              );
+            }),
           ),
         ],
       ),
