@@ -139,41 +139,6 @@ Widget _buildConfirmPasswordTF(
   );
 }
 
-Widget _buildNextBtn(
-  BuildContext context,
-  TextEditingController nameController,
-  TextEditingController lastNameController,
-  TextEditingController emailController,
-  TextEditingController passwordController,
-  GlobalKey<FormState> _formKey,
-) {
-  return Container(
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          var result = await context.read<AuthenticationService>().signIn(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim());
-        }
-      },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF43B1BF)),
-        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(20)),
-      ),
-      child: Text(
-        'PRÓXIMO',
-        style: TextStyle(
-          letterSpacing: 1.25,
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'OpenSans',
-        ),
-      ),
-    ),
-  );
-}
-
 Widget _buildSignUpBtn(
   BuildContext context,
   TextEditingController nameController,

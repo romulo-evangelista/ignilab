@@ -105,7 +105,7 @@ class EditVaccine extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  Widget _buildAddVaccineBtn(
+  Widget _buildEditVaccineBtn(
       BuildContext context,
       String documentId,
       TextEditingController vaccine,
@@ -304,7 +304,7 @@ class EditVaccine extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
           alignment: Alignment.bottomCenter,
-          child: _buildAddVaccineBtn(
+          child: _buildEditVaccineBtn(
             context,
             document.id,
             vaccineController,
