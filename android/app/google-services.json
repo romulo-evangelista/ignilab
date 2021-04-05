@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084392307303:android:8d979cd1412380ff1872c2",
+        "mobilesdk_app_id": "1:1084392307303:android:878b86e3839e88b71872c2",
         "android_client_info": {
-          "package_name": "com.example.ignilab"
+          "package_name": "com.ignilab.imuni"
         }
       },
       "oauth_client": [

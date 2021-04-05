@@ -1,4 +1,4 @@
-package com.example.ignilab
+package com.ignilab.imuni
 
 import io.flutter.embedding.android.FlutterActivity
 
