@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1084392307303",
-    "project_id": "ignilab-8df3f",
-    "storage_bucket": "ignilab-8df3f.appspot.com"
+    "project_number": "448938223222",
+    "project_id": "ignilab-38b17",
+    "storage_bucket": "ignilab-38b17.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084392307303:android:878b86e3839e88b71872c2",
+        "mobilesdk_app_id": "1:448938223222:android:a5461b4a47aa585dd2e157",
         "android_client_info": {
           "package_name": "com.ignilab.imuni"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1084392307303-o255do1l1job2eng5cki15kqqlsip4er.apps.googleusercontent.com",
+          "client_id": "448938223222-b8idq5vmnom2il5pnsccb7dvisrnjh4a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDJE7hibYpyZcmsN_4EZ2xJfVSbl4DWunE"
+          "current_key": "AIzaSyBqdDc-67OqnyPDZ78UKFdADPX6Tvw3Bic"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1084392307303-o255do1l1job2eng5cki15kqqlsip4er.apps.googleusercontent.com",
+              "client_id": "448938223222-b8idq5vmnom2il5pnsccb7dvisrnjh4a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
